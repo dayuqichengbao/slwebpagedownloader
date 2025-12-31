@@ -1,0 +1,2 @@
+(self.webpackChunkxhs_pc_web=self.webpackChunkxhs_pc_web||[]).push([["8019"],{38634:function(){var e,t,n;e=Event.prototype,t=document,n=window,e.composedPath||Object.defineProperties(e,{path:{get:function(){for(var e=this.target,p=[];null!==e.parentNode;)p.push(e),e=e.parentNode;return p.push(t,n),p}},composedPath:{value:function(){return this.path},writable:!0}})}}]);
+//# sourceMappingURL=https://picasso-private-1251524319.cos.ap-shanghai.myqcloud.com/data/formula-static/formula/xhs-pc-web/8019.6ff0577f.js.map

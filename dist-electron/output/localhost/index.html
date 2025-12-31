@@ -1,0 +1,258 @@
+<html lang="en"><head>
+    <script type="module" src="/@vite/client"></script>
+
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="/vite.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vite + Vue + TS</title>
+  <style type="text/css" data-vite-dev-id="/Users/one/Documents/code/web_downloader/src/style.css">:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+.card {
+  padding: 2em;
+}
+
+#app {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+</style><style type="text/css" data-vite-dev-id="/Users/one/Documents/code/web_downloader/src/App.vue?vue&amp;type=style&amp;index=0&amp;scoped=7a7a37b1&amp;lang.css">
+/* 整体布局 */
+.app-container[data-v-7a7a37b1] {
+  display: flex;
+  height: 100vh;
+  background: #f5f7fa;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI";
+}
+
+/* 左侧网页区 */
+.web-panel[data-v-7a7a37b1] {
+  flex: 1;
+  background: #fff;
+  border-right: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+}
+.browser-bar[data-v-7a7a37b1] {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  border-bottom: 1px solid #e5e7eb;
+}
+.window-controls[data-v-7a7a37b1] {
+  display: flex;
+  gap: 6px;
+  margin-right: 12px;
+}
+.dot[data-v-7a7a37b1] {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+.red[data-v-7a7a37b1] {
+  background: #ff5f56;
+}
+.yellow[data-v-7a7a37b1] {
+  background: #ffbd2e;
+}
+.green[data-v-7a7a37b1] {
+  background: #27c93f;
+}
+.address-bar[data-v-7a7a37b1] {
+  background: #f1f3f5;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 13px;
+  color: #555;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.webview[data-v-7a7a37b1] {
+  flex: 1;
+  width: 100%;
+}
+
+/* 右侧控制区 */
+.control-panel[data-v-7a7a37b1] {
+  width: 420px;
+  background: #fbfcfe;
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+}
+
+/* 工具栏 */
+.toolbar[data-v-7a7a37b1] {
+  display: flex;
+  gap: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* URL 输入区 */
+.url-input[data-v-7a7a37b1] {
+  display: flex;
+  gap: 10px;
+  margin: 14px 0;
+}
+.url-input input[data-v-7a7a37b1] {
+  flex: 1;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+}
+.primary-btn[data-v-7a7a37b1] {
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0 16px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.primary-btn[data-v-7a7a37b1]:hover {
+  background: #2563eb;
+}
+
+/* 统计区 */
+.stats[data-v-7a7a37b1] {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px 12px;
+  font-size: 13px;
+  color: #374151;
+  margin-bottom: 10px;
+}
+
+/* 表格 */
+.table[data-v-7a7a37b1] {
+  flex: 1;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+}
+.table-header[data-v-7a7a37b1],
+.table-row[data-v-7a7a37b1] {
+  display: grid;
+  grid-template-columns: 80px 1fr 40px;
+  padding: 8px 10px;
+  font-size: 13px;
+  align-items: center;
+}
+.table-header[data-v-7a7a37b1] {
+  background: #f9fafb;
+  font-weight: 600;
+  color: #374151;
+  border-bottom: 1px solid #e5e7eb;
+}
+.table-row[data-v-7a7a37b1] {
+  border-bottom: 1px solid #f1f5f9;
+  color: #4b5563;
+}
+.status.idle[data-v-7a7a37b1] {
+  color: #9ca3af;
+}
+.skip[data-v-7a7a37b1] {
+  cursor: pointer;
+  color: #9ca3af;
+}
+
+/* 底部 */
+.footer[data-v-7a7a37b1] {
+  margin-top: 10px;
+  font-size: 12px;
+  color: #6b7280;
+}
+.progress-bar[data-v-7a7a37b1] {
+  margin-top: 6px;
+  height: 6px;
+  background: #e5e7eb;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.progress-fill[data-v-7a7a37b1] {
+  width: 0%;
+  height: 100%;
+  background: #3b82f6;
+}
+</style></head>
+  <body>
+    <div id="app" data-v-app=""><div data-v-7a7a37b1="" class="app-container"><!-- 右侧：操作区 --><div data-v-7a7a37b1="" class="control-panel"><!-- 顶部工具栏 --><div data-v-7a7a37b1="" class="toolbar"><div data-v-7a7a37b1="" class="tool-item">History</div><div data-v-7a7a37b1="" class="tool-item">Settings</div><div data-v-7a7a37b1="" class="tool-item">Queue</div><div data-v-7a7a37b1="" class="tool-item">Log</div><div data-v-7a7a37b1="" class="tool-item">File</div><div data-v-7a7a37b1="" class="tool-item">Folder</div><div data-v-7a7a37b1="" class="tool-item">Download</div><div data-v-7a7a37b1="" class="tool-item">Next</div><div data-v-7a7a37b1="" class="tool-item">Pause</div><div data-v-7a7a37b1="" class="tool-item">Stop</div></div><!-- URL 输入 --><div data-v-7a7a37b1="" class="url-input"><input data-v-7a7a37b1="" type="text" placeholder="https://www.example.com"><button data-v-7a7a37b1="" class="primary-btn">Download</button></div><!-- 统计信息 --><div class="stats" data-v-7a7a37b1=""><div class="stat-item" data-v-7a7a37b1="">Level: 0</div><div class="stat-item" data-v-7a7a37b1="">Files Downloaded: 0</div><div class="stat-item" data-v-7a7a37b1="">Files Remaining: 0</div><div class="stat-item" data-v-7a7a37b1="">Errors: 0</div></div><!-- 下载列表 --><div data-v-7a7a37b1="" class="table"><div data-v-7a7a37b1="" class="table-header"><span data-v-7a7a37b1="">Status</span><span data-v-7a7a37b1="">URL or Path</span><span data-v-7a7a37b1="">Skip</span></div><div data-v-7a7a37b1="" class="table-row"><span data-v-7a7a37b1="" class="status idle">Idle</span><span data-v-7a7a37b1="" class="path">—</span><span data-v-7a7a37b1="" class="skip">✕</span></div><div data-v-7a7a37b1="" class="table-row"><span data-v-7a7a37b1="" class="status idle">Idle</span><span data-v-7a7a37b1="" class="path">—</span><span data-v-7a7a37b1="" class="skip">✕</span></div><div data-v-7a7a37b1="" class="table-row"><span data-v-7a7a37b1="" class="status idle">Idle</span><span data-v-7a7a37b1="" class="path">—</span><span data-v-7a7a37b1="" class="skip">✕</span></div><div data-v-7a7a37b1="" class="table-row"><span data-v-7a7a37b1="" class="status idle">Idle</span><span data-v-7a7a37b1="" class="path">—</span><span data-v-7a7a37b1="" class="skip">✕</span></div><div data-v-7a7a37b1="" class="table-row"><span data-v-7a7a37b1="" class="status idle">Idle</span><span data-v-7a7a37b1="" class="path">—</span><span data-v-7a7a37b1="" class="skip">✕</span></div><div data-v-7a7a37b1="" class="table-row"><span data-v-7a7a37b1="" class="status idle">Idle</span><span data-v-7a7a37b1="" class="path">—</span><span data-v-7a7a37b1="" class="skip">✕</span></div></div><!-- 底部进度 --><div data-v-7a7a37b1="" class="footer"><div data-v-7a7a37b1="" class="progress-info"> Progress: 0% | Files Downloaded: 0 / 0 | Errors: 0 </div><div data-v-7a7a37b1="" class="progress-bar"><div data-v-7a7a37b1="" class="progress-fill"></div></div></div></div></div></div>
+    <script type="module" src="/src/main.ts"></script>
+  
+
+</body></html>
