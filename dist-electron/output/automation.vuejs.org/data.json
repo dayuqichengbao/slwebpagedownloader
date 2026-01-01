@@ -1,0 +1,245 @@
+{
+  "platinum": [
+    {
+      "name": "VueMastery",
+      "url": "https://www.vuemastery.com/",
+      "img": "vuemastery.png"
+    },
+    {
+      "name": "Vehikl",
+      "url": "https://vehikl.com/",
+      "img": "vehikl.png"
+    },
+    {
+      "name": "Vue.js Amsterdam",
+      "url": "https://vuejs.amsterdam/",
+      "img": "vue_js_amsterdam.png"
+    },
+    {
+      "name": "Chrome Frameworks Fund",
+      "url": "https://opencollective.com/2021-frameworks-fund",
+      "img": "chrome_frameworks_fund.png"
+    },
+    {
+      "name": "HeroDevs",
+      "url": "https://www.herodevs.com/support/vue",
+      "img": "herodevs.png"
+    },
+    {
+      "name": "JavaScript Certification",
+      "url": "https://certificates.dev/javascript/?ref=vuejs-sponsor&friend=VUEJS",
+      "img": "javascript_certification.png?v2",
+      "description": "Certification of competence for the JavaScript language"
+    },
+    {
+      "name": "CodeRabbit ",
+      "url": "https://www.coderabbit.ai?utm_source=github&utm_medium=sponsors&utm_campaign=evan_you_2025",
+      "img": "coderabbit_.png"
+    },
+    {
+      "name": "ImageKit.io",
+      "url": "https://imagekit.io/?utm_source=vuejs&utm_medium=referral&utm_campaign=oss-sponsorship&utm_content=homepage",
+      "img": "imagekit_io.svg"
+    },
+    {
+      "name": "Greptile",
+      "url": "https://www.greptile.com/?utm_source=vuejs&utm_medium=sponsorship&utm_campaign=vue_sponsor_page",
+      "img": "greptile.png"
+    }
+  ],
+  "gold": [
+    {
+      "name": "Tidelift",
+      "url": "https://tidelift.com/subscription/npm/vue",
+      "img": "tidelift.png"
+    },
+    {
+      "name": "Laravel",
+      "url": "https://laravel.com/",
+      "img": "laravel.png"
+    },
+    {
+      "name": "LY Corporation",
+      "url": "https://www.lycorp.co.jp/en/",
+      "img": "ly_corporation.png?v2"
+    },
+    {
+      "name": "Fenêtre Online Solutions",
+      "url": "https://www.fenetre.nl/",
+      "img": "fen_tre_online_solutions.svg"
+    },
+    {
+      "name": "Localazy",
+      "url": "https://localazy.com/blog/how-to-localize-vuejs-app-with-vue-i18n-and-localazy?utm_source=vuejs&utm_medium=banner&utm_campaign=sponsorships_vuejs&utm_content=logo",
+      "img": "localazy.svg"
+    },
+    {
+      "name": "Fathom Analytics",
+      "url": "https://usefathom.com/",
+      "img": "fathom_analytics.svg"
+    },
+    {
+      "name": "Sentry",
+      "url": "https://sentry.io/for/vue?utm_source=vuejs.org&utm_medium=paid-community",
+      "img": "sentry.png"
+    },
+    {
+      "name": "Certible",
+      "url": "https://www.certible.com",
+      "img": "certible.svg"
+    },
+    {
+      "name": "Quickbooks Tool Hub",
+      "url": "https://qbtoolhub.com/",
+      "img": "quickbooks_tool_hub.png"
+    },
+    {
+      "name": "VueJobs",
+      "url": "https://vuejobs.com/?utm_source=vuejs.com&utm_campaign=sponsor",
+      "img": "vuejobs.png"
+    },
+    {
+      "name": "LambdaTest",
+      "url": "https://lambdatest.com/",
+      "img": "lambdatest.svg"
+    },
+    {
+      "name": "Crisp",
+      "url": "https://crisp.chat/en/",
+      "img": "crisp.png"
+    },
+    {
+      "name": "Goread.io",
+      "url": "https://goread.io/buy-instagram-followers",
+      "img": "goread_io.png"
+    },
+    {
+      "name": "Poprey - Buy Instagram Likes",
+      "url": "https://poprey.com/",
+      "img": "poprey___buy_instagram_likes.png"
+    },
+    {
+      "name": "Fortune games",
+      "url": "https://www.fortunegames.com/",
+      "img": "fortune_games.png"
+    },
+    {
+      "name": "it@M",
+      "url": "https://opensource.muenchen.de/improve.html#sponsoring",
+      "img": "it_m.png"
+    },
+    {
+      "name": "Blastup",
+      "url": "https://blastup.com/buy-instagram-likes",
+      "img": "blastup.png"
+    },
+    {
+      "name": "Stormlikes",
+      "url": "https://stormlikes.com",
+      "img": "stormlikes.png"
+    },
+    {
+      "name": "Buy Instagram Followers & Likes",
+      "url": "https://leofame.com/buy-instagram-followers",
+      "img": "buy_instagram_followers___likes.png"
+    },
+    {
+      "name": "Buy Instagram Followers Twicsy",
+      "url": "https://twicsy.com/buy-instagram-followers",
+      "img": "buy_instagram_followers_twicsy.png"
+    },
+    {
+      "name": "SocialBoosting",
+      "url": "https://www.socialboosting.com/",
+      "img": "socialboosting.png"
+    },
+    {
+      "name": "Tiranga Game",
+      "url": "https://tirangaagame.games/",
+      "img": "tiranga_game.png"
+    },
+    {
+      "name": "BDG Game",
+      "url": "https://www.bdggame.io",
+      "img": "bdg_game.png"
+    },
+    {
+      "name": "Daman Game",
+      "url": "https://damanapp.download/",
+      "img": "daman_game.png"
+    },
+    {
+      "name": "Ok Win",
+      "url": "https://okwin-official.uk.com/",
+      "img": "ok_win.png"
+    },
+    {
+      "name": "Ok win",
+      "url": "https://okwingame.io",
+      "img": "ok_win.png"
+    }
+  ],
+  "silver": [
+    {
+      "name": "Doximity",
+      "url": "https://technology.doximity.com/",
+      "img": "doximity.png"
+    },
+    {
+      "name": "Social Followers",
+      "url": "https://www.socialfollowers.uk/buy-tiktok-followers/",
+      "img": "social_followers.png"
+    },
+    {
+      "name": "Route Planner and Route Optimizer - Route4Me",
+      "url": "https://route4me.com",
+      "img": "route_planner_and_route_optimizer___route4me.png"
+    },
+    {
+      "name": "Indy",
+      "url": "https://www.indy.fr/",
+      "img": "indy.png"
+    },
+    {
+      "name": "Buy Instagram Followers from SocialWick",
+      "url": "https://www.socialwick.com/instagram/followers",
+      "img": "buy_instagram_followers_from_socialwick.png"
+    }
+  ],
+  "bronze": [
+    {
+      "name": "Derek Pollard",
+      "url": "https://polyglotengineer.com/derek.pollard",
+      "img": "derek_pollard.png"
+    },
+    {
+      "name": "BGASoft",
+      "url": "https://www.bgasoft.com",
+      "img": "bgasoft.png"
+    },
+    {
+      "name": "Posit",
+      "url": "https://posit.co/",
+      "img": "posit.png"
+    },
+    {
+      "name": "codefortynine",
+      "url": "https://codefortynine.com",
+      "img": "codefortynine.png"
+    },
+    {
+      "name": "Famety - Buy Instagram Followers",
+      "url": "https://www.famety.net/",
+      "img": "famety___buy_instagram_followers.png"
+    }
+  ],
+  "platinum_china": [
+    {
+      "name": "CRMEB",
+      "url": "http://github.crmeb.net/u/vue",
+      "url_cn": "http://github.crmeb.net/u/vue",
+      "img": "crmeb.svg?v2",
+      "description": "开源电商系统"
+    }
+  ]
+}

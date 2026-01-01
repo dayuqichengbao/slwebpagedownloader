@@ -1,8 +1,10 @@
-import { app, BrowserWindow, WebContentsView, ipcMain } from 'electron'
+import { app, BrowserWindow, WebContentsView, ipcMain, dialog } from 'electron'
 import { createRequire } from 'node:module'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 import fs from 'node:fs'
+import os from 'os'
+import remoteMain from '@electron/remote/main'
 
 const require = createRequire(import.meta.url)
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -41,6 +43,7 @@ function getMime(response: any): string {
 function ensureDir(dir: string) {
   fs.mkdirSync(dir, { recursive: true });
 }
+remoteMain.initialize()
 
 function getDomainDir(url: string) {
   const { hostname } = new URL(url);
@@ -49,19 +52,23 @@ function getDomainDir(url: string) {
   return dir;
 }
 
-let mainWindow
-let subView:WebContentsView
+let subView: WebContentsView
+let mainWin: BrowserWindow
 
 function createWindow() {
   win = new BrowserWindow({
     icon: path.join(process.env.VITE_PUBLIC, 'electron-vite.svg'),
+    title: 'QCSiteDownloader',
     webPreferences: {
       preload: path.join(__dirname, 'preload.mjs'),
       nodeIntegration: false,
       contextIsolation: true,
     },
   })
-  mainWindow = win
+  mainWin = win
+
+
+  remoteMain.enable(win.webContents) // 启用 remote
 
   /* -------- BrowserView A -------- */
   const viewA = new WebContentsView()
@@ -105,7 +112,6 @@ function createWindow() {
 
       const mime = getMime(response);
 
-      console.log('###new url', url)
 
       // 新内容，生成路径
       const domainDir = getDomainDir(url);
@@ -136,10 +142,7 @@ function createWindow() {
       fs.mkdirSync(path.dirname(filePath), { recursive: true });
       fs.writeFileSync(filePath, buffer);
 
-      // contentIndex.set(contentKey, filePath);
-      // urlIndex.set(url, filePath);
-
-      console.log("Saved:", url);
+      win?.webContents.send('item-add', url)
     } catch {
       // streaming / ws / large media ignore
     }
@@ -166,6 +169,7 @@ function createWindow() {
 
         fs.writeFileSync(htmlPath, html, "utf-8");
         console.log("Saved HTML:", htmlPath);
+        win.webContents.send('item-add', htmlPath)
       })
 
 
@@ -177,6 +181,14 @@ function createWindow() {
     setTimeout(() => {
       console.log("Capture complete, exiting.");
     }, 15000);
+  })
+
+  win.on("resize", () => {
+    applyLayout()
+  })
+
+  viewA.webContents.on("did-finish-load", () => {
+    applyLayout()
   })
 
   // ⭐ 默认打开 DevTools
@@ -198,6 +210,47 @@ ipcMain.handle('update-subview-url', (_, url) => {
     subView.webContents.loadURL(url)
   }
 })
+
+ipcMain.handle('select-download-path', async () => {
+  const defaultDir =
+    os.platform() === 'win32'
+      ? 'C:\\Users\\Public\\Downloads'
+      : '/Users/Shared/Downloads'
+
+  const result = await dialog.showOpenDialog({
+    title: '选择下载文件夹',
+    defaultPath: defaultDir,
+    properties: ['openDirectory', 'createDirectory']
+  })
+
+  return result
+})
+
+let shellWidth = 470   // 左侧 Shell 当前宽度（px）
+
+function applyLayout() {
+  const { width, height } = mainWin.getContentBounds()
+
+  subView.setBounds({
+    x: 0,
+    y: 0,
+    width: width - shellWidth,
+    height
+  })
+}
+
+
+ipcMain.on("set-shell-width", (_, newWidth) => {
+  const { width } = mainWin.getContentBounds()
+
+  shellWidth = Math.max(
+    200,
+    Math.min(newWidth, width - 300) // 给 viewA 留最小宽度
+  )
+
+  applyLayout()
+})
+
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits

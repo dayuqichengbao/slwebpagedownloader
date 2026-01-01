@@ -4,92 +4,13 @@
     <meta charset="UTF-8">
     <link rel="icon" type="image/svg+xml" href="/vite.svg">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vite + Vue + TS</title>
-  <style type="text/css" data-vite-dev-id="/Users/one/Documents/code/web_downloader/src/style.css">:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-.card {
-  padding: 2em;
-}
-
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-}
-</style><style type="text/css" data-vite-dev-id="/Users/one/Documents/code/web_downloader/src/App.vue?vue&amp;type=style&amp;index=0&amp;scoped=7a7a37b1&amp;lang.css">
+    <title>QCSiteDownloader</title>
+  <style type="text/css" data-vite-dev-id="/Users/one/Documents/code/web_downloader/src/style.css"></style><style type="text/css" data-vite-dev-id="/Users/one/Documents/code/web_downloader/src/App.vue?vue&amp;type=style&amp;index=0&amp;scoped=7a7a37b1&amp;lang.css">
 /* 整体布局 */
 .app-container[data-v-7a7a37b1] {
   display: flex;
   height: 100vh;
-  background: #f5f7fa;
+  background: red;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI";
 }
 
@@ -204,6 +125,7 @@ button:focus-visible {
   border-radius: 8px;
   overflow: hidden;
   background: #fff;
+  overflow-y: auto;
 }
 .table-header[data-v-7a7a37b1],
 .table-row[data-v-7a7a37b1] {
@@ -251,8 +173,8 @@ button:focus-visible {
 }
 </style></head>
   <body>
-    <div id="app" data-v-app=""><div data-v-7a7a37b1="" class="app-container"><!-- 右侧：操作区 --><div data-v-7a7a37b1="" class="control-panel"><!-- 顶部工具栏 --><div data-v-7a7a37b1="" class="toolbar"><div data-v-7a7a37b1="" class="tool-item">History</div><div data-v-7a7a37b1="" class="tool-item">Settings</div><div data-v-7a7a37b1="" class="tool-item">Queue</div><div data-v-7a7a37b1="" class="tool-item">Log</div><div data-v-7a7a37b1="" class="tool-item">File</div><div data-v-7a7a37b1="" class="tool-item">Folder</div><div data-v-7a7a37b1="" class="tool-item">Download</div><div data-v-7a7a37b1="" class="tool-item">Next</div><div data-v-7a7a37b1="" class="tool-item">Pause</div><div data-v-7a7a37b1="" class="tool-item">Stop</div></div><!-- URL 输入 --><div data-v-7a7a37b1="" class="url-input"><input data-v-7a7a37b1="" type="text" placeholder="https://www.example.com"><button data-v-7a7a37b1="" class="primary-btn">Download</button></div><!-- 统计信息 --><div class="stats" data-v-7a7a37b1=""><div class="stat-item" data-v-7a7a37b1="">Level: 0</div><div class="stat-item" data-v-7a7a37b1="">Files Downloaded: 0</div><div class="stat-item" data-v-7a7a37b1="">Files Remaining: 0</div><div class="stat-item" data-v-7a7a37b1="">Errors: 0</div></div><!-- 下载列表 --><div data-v-7a7a37b1="" class="table"><div data-v-7a7a37b1="" class="table-header"><span data-v-7a7a37b1="">Status</span><span data-v-7a7a37b1="">URL or Path</span><span data-v-7a7a37b1="">Skip</span></div><div data-v-7a7a37b1="" class="table-row"><span data-v-7a7a37b1="" class="status idle">Idle</span><span data-v-7a7a37b1="" class="path">—</span><span data-v-7a7a37b1="" class="skip">✕</span></div><div data-v-7a7a37b1="" class="table-row"><span data-v-7a7a37b1="" class="status idle">Idle</span><span data-v-7a7a37b1="" class="path">—</span><span data-v-7a7a37b1="" class="skip">✕</span></div><div data-v-7a7a37b1="" class="table-row"><span data-v-7a7a37b1="" class="status idle">Idle</span><span data-v-7a7a37b1="" class="path">—</span><span data-v-7a7a37b1="" class="skip">✕</span></div><div data-v-7a7a37b1="" class="table-row"><span data-v-7a7a37b1="" class="status idle">Idle</span><span data-v-7a7a37b1="" class="path">—</span><span data-v-7a7a37b1="" class="skip">✕</span></div><div data-v-7a7a37b1="" class="table-row"><span data-v-7a7a37b1="" class="status idle">Idle</span><span data-v-7a7a37b1="" class="path">—</span><span data-v-7a7a37b1="" class="skip">✕</span></div><div data-v-7a7a37b1="" class="table-row"><span data-v-7a7a37b1="" class="status idle">Idle</span><span data-v-7a7a37b1="" class="path">—</span><span data-v-7a7a37b1="" class="skip">✕</span></div></div><!-- 底部进度 --><div data-v-7a7a37b1="" class="footer"><div data-v-7a7a37b1="" class="progress-info"> Progress: 0% | Files Downloaded: 0 / 0 | Errors: 0 </div><div data-v-7a7a37b1="" class="progress-bar"><div data-v-7a7a37b1="" class="progress-fill"></div></div></div></div></div></div>
-    <script type="module" src="/src/main.ts"></script>
+    <div id="app" data-v-app=""><div data-v-7a7a37b1="" class="app-container"><!-- 左侧：网页区 --><div data-v-7a7a37b1="" class="web-panel"></div><!-- 右侧：操作区 --><div data-v-7a7a37b1="" class="control-panel"><!-- 顶部工具栏 --><div data-v-7a7a37b1="" class="toolbar"><div data-v-7a7a37b1="" class="tool-item">History</div><div data-v-7a7a37b1="" class="tool-item">Settings</div><div data-v-7a7a37b1="" class="tool-item">Queue</div><div data-v-7a7a37b1="" class="tool-item">Log</div><div data-v-7a7a37b1="" class="tool-item">File</div><div data-v-7a7a37b1="" class="tool-item">Folder</div><div data-v-7a7a37b1="" class="tool-item">Download</div><div data-v-7a7a37b1="" class="tool-item">Next</div><div data-v-7a7a37b1="" class="tool-item">Pause</div><div data-v-7a7a37b1="" class="tool-item">Stop</div></div><!-- URL 输入 --><div data-v-7a7a37b1="" class="url-input"><input data-v-7a7a37b1="" type="text" placeholder="https://www.example.com"><button data-v-7a7a37b1="" class="primary-btn">Download</button></div><div data-v-7a7a37b1=""><input data-v-7a7a37b1="" type="text" placeholder="请选择下载保存路径" readonly=""><button data-v-7a7a37b1="">选择路径</button></div><div data-v-7a7a37b1="" class="settings"><input data-v-7a7a37b1="" type="checkbox" id="check-robots"><label data-v-7a7a37b1="" for="check-robots">检查robots.txt</label></div><!-- 统计信息 --><div data-v-7a7a37b1="" class="stats"><div data-v-7a7a37b1="" class="stat-item">Files Downloaded: 0</div></div><!-- 下载列表 --><div data-v-7a7a37b1="" class="table"><div data-v-7a7a37b1="" class="table-header"><span data-v-7a7a37b1="">URL or Path</span></div></div></div></div></div>
+    <script type="module" src="/src/main.ts?t=1767193146589"></script>
   
 
 </body></html>

@@ -21,3 +21,18 @@ contextBridge.exposeInMainWorld('electronAPI', {
 
   updateSubViewUrl: (url: string) => ipcRenderer.invoke('update-subview-url', url)
 })
+
+
+contextBridge.exposeInMainWorld('api', {
+  onItemAdd: (callback: (item: any) => void) => {
+    ipcRenderer.on('item-add', (_, item) => {
+      callback(item)
+    })
+  },
+  selectDownloadPath: () => ipcRenderer.invoke('select-download-path')
+})
+
+
+contextBridge.exposeInMainWorld("layoutAPI", {
+  setShellWidth: (width: number) => ipcRenderer.send("set-shell-width", width)
+})

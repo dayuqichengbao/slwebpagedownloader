@@ -1,6 +1,9 @@
 <template>
   <div class="app-container">
+    <!-- 左侧：网页区 -->
+    <div class="web-panel">
 
+    </div>
     <!-- 右侧：操作区 -->
     <div class="control-panel">
       <!-- 顶部工具栏 -->
@@ -16,44 +19,41 @@
         <button class="primary-btn" @click="handleDownload">Download</button>
       </div>
 
+      <div class="url-input">
+        <input type="text" v-model="downloadPath" placeholder="请选择下载保存路径" readonly />
+        <button class="primary-btn" @click="choosePath">选择路径</button>
+
+      </div>
+
+      <div class="settings">
+        <input type="checkbox" id="check-robots" v-model="robotsChecked" />
+        <label for="check-robots">检查robots.txt</label>
+      </div>
+
       <!-- 统计信息 -->
       <div class="stats">
-        <div class="stat-item">Level: 0</div>
-        <div class="stat-item">Files Downloaded: 0</div>
-        <div class="stat-item">Files Remaining: 0</div>
-        <div class="stat-item">Errors: 0</div>
+        <div class="stat-item">Files Downloaded: {{ list.length }}</div>
       </div>
 
       <!-- 下载列表 -->
       <div class="table">
         <div class="table-header">
-          <span>Status</span>
           <span>URL or Path</span>
-          <span>Skip</span>
         </div>
 
-        <div class="table-row" v-for="i in 6" :key="i">
-          <span class="status idle">Idle</span>
-          <span class="path">—</span>
-          <span class="skip">✕</span>
+        <div class="table-row" v-for="suburl in list">
+          <span class="path">{{ suburl }}</span>
         </div>
+
+
       </div>
 
-      <!-- 底部进度 -->
-      <div class="footer">
-        <div class="progress-info">
-          Progress: 0% | Files Downloaded: 0 / 0 | Errors: 0
-        </div>
-        <div class="progress-bar">
-          <div class="progress-fill"></div>
-        </div>
-      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 
 const url = ref('https://www.baidu.com')
 
@@ -72,7 +72,29 @@ const tools = [
 
 //Download按钮点击，打印日志
 function handleDownload() {
-  window.electronAPI.updateSubViewUrl("https://www.xiaohongshu.com/explore?language=zh-CN")
+  list.value = []  // 清空列表
+  window.electronAPI.updateSubViewUrl(url.value)
+}
+
+const list = ref([])
+
+onMounted(() => {
+  window.api.onItemAdd((item) => {
+    // 关键：只追加增量
+    list.value.unshift(item)
+  })
+})
+
+const robotsChecked = ref(true)
+
+const downloadPath = ref('')
+
+async function choosePath() {
+  const result = await window.api.selectDownloadPath()
+  console.log('选择的路径：', result)
+  if (!result.canceled && result.filePaths.length > 0) {
+    downloadPath.value = result.filePaths[0] // 回显到页面
+  }
 }
 
 </script>
@@ -82,7 +104,7 @@ function handleDownload() {
 .app-container {
   display: flex;
   height: 100vh;
-  background: #f5f7fa;
+  background: red;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI";
 }
 
@@ -208,6 +230,7 @@ function handleDownload() {
   border-radius: 8px;
   overflow: hidden;
   background: #fff;
+  overflow-y: auto;
 }
 
 .table-header,

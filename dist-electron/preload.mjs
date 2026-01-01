@@ -19,3 +19,14 @@ electron.contextBridge.exposeInMainWorld("electronAPI", {
   },
   updateSubViewUrl: (url) => electron.ipcRenderer.invoke("update-subview-url", url)
 });
+electron.contextBridge.exposeInMainWorld("api", {
+  onItemAdd: (callback) => {
+    electron.ipcRenderer.on("item-add", (_, item) => {
+      callback(item);
+    });
+  },
+  selectDownloadPath: () => electron.ipcRenderer.invoke("select-download-path")
+});
+electron.contextBridge.exposeInMainWorld("layoutAPI", {
+  setShellWidth: (width) => electron.ipcRenderer.send("set-shell-width", width)
+});
