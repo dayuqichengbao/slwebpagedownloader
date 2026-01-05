@@ -1,12 +1,10 @@
-import { app, BrowserWindow, WebContentsView, ipcMain, dialog } from 'electron'
-import { createRequire } from 'node:module'
+import { app, BrowserWindow, WebContentsView, ipcMain, dialog, shell, clipboard } from 'electron'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 import fs from 'node:fs'
 import os from 'os'
-import remoteMain from '@electron/remote/main'
+import { settingsStore } from './store';
 
-const require = createRequire(import.meta.url)
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 // The built directory structure
@@ -25,12 +23,59 @@ export const VITE_DEV_SERVER_URL = process.env['VITE_DEV_SERVER_URL']
 export const MAIN_DIST = path.join(process.env.APP_ROOT, 'dist-electron')
 export const RENDERER_DIST = path.join(process.env.APP_ROOT, 'dist')
 
+
 process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL ? path.join(process.env.APP_ROOT, 'public') : RENDERER_DIST
 
 let win: BrowserWindow | null
 
-const TARGET_URL = "https://baidu.com";
-const OUTPUT_ROOT = path.join(__dirname, "output");
+const TARGET_URL = "https://example.com";
+
+
+// function getDefaultDownloadPath(): string {
+//   const defaultDir =
+//     os.platform() === 'win32'
+//       ? 'C:\\Users\\Public\\Downloads'
+//       : '~/Downloads'
+
+//   const dir = path.join(defaultDir, "web-downloader", "output");
+//   ensureDir(dir);
+//   return dir;
+
+// }
+
+let currentDownloadUrl: string = '';
+
+function getDownloadRootDir(): string {
+  let settingDir = settingsStore.get('downloadPath');
+  if (settingDir == null || settingDir.trim() == '') {
+    const defaultDir =
+      os.platform() === 'win32'
+        ? 'C:\\Users\\Public\\Downloads'
+        : '~/Downloads'
+    return defaultDir;
+  }
+  ensureDir(settingDir);
+  return settingDir;
+}
+
+function getDomainDir(url: string) {
+  let downloadHostname = '';
+  if (currentDownloadUrl != '') {
+    downloadHostname = new URL(currentDownloadUrl).hostname;
+  }
+  let hostname = '';
+  if (url != '') {
+    hostname = new URL(url).hostname;
+  }
+
+  const dir = path.join(getDownloadRootDir(), 'webdownloader', downloadHostname, hostname);
+  ensureDir(dir);
+  return dir;
+}
+
+function ensureDir(dir: string) {
+  fs.mkdirSync(dir, { recursive: true });
+}
 
 function getMime(response: any): string {
   return (
@@ -40,25 +85,16 @@ function getMime(response: any): string {
   );
 }
 
-function ensureDir(dir: string) {
-  fs.mkdirSync(dir, { recursive: true });
-}
-remoteMain.initialize()
-
-function getDomainDir(url: string) {
-  const { hostname } = new URL(url);
-  const dir = path.join(OUTPUT_ROOT, hostname);
-  ensureDir(dir);
-  return dir;
-}
 
 let subView: WebContentsView
 let mainWin: BrowserWindow
+
 
 function createWindow() {
   win = new BrowserWindow({
     icon: path.join(process.env.VITE_PUBLIC, 'electron-vite.svg'),
     title: 'QCSiteDownloader',
+    width: 1420,
     webPreferences: {
       preload: path.join(__dirname, 'preload.mjs'),
       nodeIntegration: false,
@@ -67,17 +103,29 @@ function createWindow() {
   })
   mainWin = win
 
-
-  remoteMain.enable(win.webContents) // 启用 remote
-
   /* -------- BrowserView A -------- */
   const viewA = new WebContentsView()
   win.contentView.addChildView(viewA)
   viewA.webContents.loadURL(TARGET_URL)
-  viewA.setBounds({ x: 0, y: 0, width: 400, height: 800 })
+  viewA.setBounds({ x: 0, y: 0, width: 1000, height: 800 })
+
+  // 1️⃣ 拦截 window.open / target=_blank
+  viewA.webContents.setWindowOpenHandler(({ url }) => {
+    // 直接在当前页面跳转
+    viewA.webContents.loadURL(url)
+    return { action: 'deny' } // 阻止新窗口
+  })
+
+  // 2️⃣ 拦截导航事件（可选，防止 link + target="_top" 打开外部浏览器）
+  viewA.webContents.on('will-navigate', (event, url) => {
+    // 如果要限制只在当前页面跳转
+    event.preventDefault()
+    viewA.webContents.loadURL(url)
+  })
+
   win.contentView.addChildView(viewA)
   subView = viewA
-  ensureDir(OUTPUT_ROOT);
+  ensureDir(getDownloadRootDir());
 
   const wc = viewA.webContents;
   const client = wc.debugger;
@@ -93,6 +141,11 @@ function createWindow() {
   // 资源抓取（JS / CSS / IMG / XHR / HTML 子资源）
 
   client.on("message", async (_event, method, params) => {
+
+    if (currentDownloadUrl == '' || currentDownloadUrl == TARGET_URL || currentDownloadUrl == 'localhost') {
+      return;
+    }
+
     if (method !== "Network.responseReceived") return;
 
     const { requestId, response } = params;
@@ -142,7 +195,10 @@ function createWindow() {
       fs.mkdirSync(path.dirname(filePath), { recursive: true });
       fs.writeFileSync(filePath, buffer);
 
-      win?.webContents.send('item-add', url)
+      win?.webContents.send('item-add', {
+        "url": url,
+        "filepath": filePath
+      })
     } catch {
       // streaming / ws / large media ignore
     }
@@ -150,37 +206,43 @@ function createWindow() {
 
 
   // Test active push message to Renderer-process.
-  win.webContents.on('did-finish-load', () => {
-    // win?.webContents.send('main-process-message', (new Date).toLocaleString())
+  viewA.webContents.on('did-finish-load', async () => {
 
     if (win == undefined || win == null) {
+      console.error("Window is not defined, cannot save HTML.");
       return
     }
 
     try {
-      win.webContents.executeJavaScript(
+      const htmlstr = await viewA.webContents.executeJavaScript(
         "document.documentElement.outerHTML"
-      ).then((html: string) => {
-        if (win == undefined || win == null) {
-          return
-        }
-        const domainDir = getDomainDir(win.webContents.getURL());
-        const htmlPath = path.join(domainDir, "index.html");
+      );
 
-        fs.writeFileSync(htmlPath, html, "utf-8");
-        console.log("Saved HTML:", htmlPath);
-        win.webContents.send('item-add', htmlPath)
+      if (win == undefined || win == null) {
+        console.error("Window is not defined, cannot save HTML.");
+        return
+      }
+
+      const domainDir = getDomainDir(win.webContents.getURL());
+      const htmlPath = path.join(domainDir, "index.html");
+
+      fs.writeFileSync(htmlPath, htmlstr, "utf-8");
+      console.log("Saved HTML:", htmlPath);
+      win.webContents.send('item-add', {
+        "url": viewA.webContents.getURL(),
+        "filepath": htmlPath
       })
 
+      // ⭐ 关键：给 XHR 留时间
+      setTimeout(() => {
+        console.log("Capture complete, exiting.");
+      }, 15000);
 
     } catch (err) {
       console.error("HTML capture failed:", err);
     }
 
-    // ⭐ 关键：给 XHR 留时间
-    setTimeout(() => {
-      console.log("Capture complete, exiting.");
-    }, 15000);
+
   })
 
   win.on("resize", () => {
@@ -207,23 +269,39 @@ function createWindow() {
  */
 ipcMain.handle('update-subview-url', (_, url) => {
   if (subView && url) {
+    currentDownloadUrl = url;
+    console.log("Updating subView URL to:", url)
     subView.webContents.loadURL(url)
   }
 })
 
 ipcMain.handle('select-download-path', async () => {
-  const defaultDir =
-    os.platform() === 'win32'
-      ? 'C:\\Users\\Public\\Downloads'
-      : '/Users/Shared/Downloads'
-
   const result = await dialog.showOpenDialog({
     title: '选择下载文件夹',
-    defaultPath: defaultDir,
+    defaultPath: getDownloadRootDir(),
     properties: ['openDirectory', 'createDirectory']
   })
 
+  settingsStore.set('downloadPath', result.canceled ?
+    getDownloadRootDir() : result.filePaths[0]);
+
   return result
+})
+
+ipcMain.handle('get-download-dir', () => {
+  return getDownloadRootDir();
+})
+
+ipcMain.handle('copy-text', (_, text: string) => {
+  clipboard.writeText(text);
+})
+
+ipcMain.handle('set-robots-checked', (_, value: boolean) => {
+  settingsStore.set('checkRobots', value);
+})
+
+ipcMain.handle('get-robots-checked', () => {
+  return settingsStore.get('checkRobots');
 })
 
 let shellWidth = 470   // 左侧 Shell 当前宽度（px）
@@ -234,21 +312,33 @@ function applyLayout() {
   subView.setBounds({
     x: 0,
     y: 0,
-    width: width - shellWidth,
+    width: width - shellWidth - 40,
     height
   })
 }
 
-
-ipcMain.on("set-shell-width", (_, newWidth) => {
-  const { width } = mainWin.getContentBounds()
-
-  shellWidth = Math.max(
-    200,
-    Math.min(newWidth, width - 300) // 给 viewA 留最小宽度
-  )
-
+ipcMain.on("shell-width-changed", (_, width) => {
+  shellWidth = width + 40
+  console.log("Shell width changed:", shellWidth)
   applyLayout()
+})
+
+ipcMain.handle('resize-window', (_, width) => {
+  const h = mainWin.getBounds().height;
+  mainWin.setSize(Math.ceil(width), h);
+});
+
+// 通过 IPC 打开文件夹
+ipcMain.handle('open-existing-folder', async (_, filepath: string) => {
+  try {
+    const result = await shell.openPath(filepath);
+    // openPath 返回空字符串表示成功
+    if (result === '') return true
+    return false
+  } catch (err) {
+    console.error(err)
+    return false
+  }
 })
 
 
@@ -270,4 +360,4 @@ app.on('activate', () => {
   }
 })
 
-app.whenReady().then(createWindow)
+app.whenReady().then(createWindow);

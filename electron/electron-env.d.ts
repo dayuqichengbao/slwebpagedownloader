@@ -23,5 +23,20 @@ declare namespace NodeJS {
 
 // Used in Renderer process, expose in `preload.ts`
 interface Window {
-  ipcRenderer: import('electron').IpcRenderer
+  ipcRenderer: import('electron').IpcRenderer,
+  electronAPI: {
+    updateSubViewUrl: (url: string) => Promise<void>
+  },
+  api: {
+    onItemAdd: (callback: (item: any) => void) => void,
+    selectDownloadPath: () => Promise<void>,
+    getDownloadDir: () => Promise<string>,
+    copyText: (text: string) => void,
+    getRobotsChecked: () => Promise<boolean>,
+    setRobotsChecked: (value: boolean) => Promise<void>,
+    openFolder: (filepath:string) => Promise<boolean>,
+  },
+  layoutAPI: {
+    setShellWidth: (width: number) => void
+  }
 }

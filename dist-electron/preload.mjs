@@ -25,8 +25,14 @@ electron.contextBridge.exposeInMainWorld("api", {
       callback(item);
     });
   },
-  selectDownloadPath: () => electron.ipcRenderer.invoke("select-download-path")
+  selectDownloadPath: () => electron.ipcRenderer.invoke("select-download-path"),
+  getDownloadDir: () => electron.ipcRenderer.invoke("get-download-dir"),
+  getRobotsChecked: () => electron.ipcRenderer.invoke("get-robots-checked"),
+  setRobotsChecked: (value) => electron.ipcRenderer.invoke("set-robots-checked", value),
+  openFolder: (filepath) => electron.ipcRenderer.invoke("open-existing-folder", filepath),
+  copyText: (text) => electron.ipcRenderer.invoke("copy-text", text)
 });
 electron.contextBridge.exposeInMainWorld("layoutAPI", {
-  setShellWidth: (width) => electron.ipcRenderer.send("set-shell-width", width)
+  setShellWidth: (width) => electron.ipcRenderer.send("shell-width-changed", width),
+  resizeWindow: (width) => electron.ipcRenderer.invoke("resize-window", width)
 });

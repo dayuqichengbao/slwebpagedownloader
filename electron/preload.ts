@@ -1,4 +1,4 @@
-import { ipcRenderer, contextBridge } from 'electron'
+import { ipcRenderer, contextBridge,clipboard } from 'electron'
 
 // --------- Expose some API to the Renderer process ---------
 contextBridge.exposeInMainWorld('electronAPI', {
@@ -29,10 +29,16 @@ contextBridge.exposeInMainWorld('api', {
       callback(item)
     })
   },
-  selectDownloadPath: () => ipcRenderer.invoke('select-download-path')
+  selectDownloadPath: () => ipcRenderer.invoke('select-download-path'),
+  getDownloadDir: () => ipcRenderer.invoke('get-download-dir'),
+  getRobotsChecked: () => ipcRenderer.invoke('get-robots-checked'),
+  setRobotsChecked: (value: boolean) => ipcRenderer.invoke('set-robots-checked', value),
+  openFolder: (filepath:string) => ipcRenderer.invoke('open-existing-folder', filepath),
+  copyText: (text: string) => ipcRenderer.invoke('copy-text', text),
 })
 
 
 contextBridge.exposeInMainWorld("layoutAPI", {
-  setShellWidth: (width: number) => ipcRenderer.send("set-shell-width", width)
+  setShellWidth: (width: number) => ipcRenderer.send("shell-width-changed", width),
+  resizeWindow: (width: number) => ipcRenderer.invoke('resize-window', width)
 })
