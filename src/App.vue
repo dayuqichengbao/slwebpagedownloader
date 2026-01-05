@@ -1,4 +1,5 @@
 <template>
+
   <div class="app-container" ref="containerRef">
     <!-- 左侧：网页区 -->
     <div class="web-panel">
@@ -14,7 +15,6 @@
           {{ item }}
         </div>
       </div> -->
-
       <!-- URL 输入 -->
       <div class="url-input">
         <input type="text" placeholder="https://www.example.com" v-model="url" />
@@ -194,6 +194,8 @@ onUnmounted(onMouseUp);
 </script>
 
 <style scoped>
+
+
 /* 整体布局 */
 .app-container {
   display: flex;
