@@ -1,5 +1,5 @@
 {
-  "name": "web_downloader",
+  "name": "slwebpagedownloader",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -20,9 +20,10 @@
   "devDependencies": {
     "@electron-forge/cli": "^7.10.2",
     "@electron-forge/maker-deb": "^7.10.2",
-    "@electron-forge/maker-squirrel": "^7.10.2",
     "@electron-forge/maker-dmg": "^7.10.2",
+    "@electron-forge/maker-squirrel": "^7.10.2",
     "@electron-forge/maker-zip": "^7.10.2",
+    "@electron-forge/publisher-github": "^7.10.2",
     "@vitejs/plugin-vue": "^5.0.4",
     "electron": "^30.0.1",
     "electron-builder": "^24.13.3",
@@ -43,7 +44,6 @@
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "electron_quick_start",
             "setupIcon": "images/icon"
           }
         },
@@ -52,20 +52,18 @@
           "config": {
             "icon": "images/icon.icns"
           }
-        },
+        }
+      ],
+      "publishers": [
         {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
+          "name": "@electron-forge/publisher-github",
+          "config": {
+            "repository": {
+              "owner": "Shawn Liu",
+              "name": "https://github.com/dayuqichengbao/slwebpagedownloader"
+            },
+            "prerelease": false
+          }
         }
       ]
     }
