@@ -1,1 +1,0 @@
-/*! BitterBrainsBanner: No banner for vuejs */

@@ -1,69 +1,103 @@
 <template>
 
   <div class="app-container" ref="containerRef">
-    <!-- 左侧：网页区 -->
+
     <div class="web-panel">
     </div>
-
     <div class="divider" @mousedown="onMouseDown"></div>
 
     <!-- 右侧：操作区 -->
-    <div class="control-panel" ref="box" :style="{ width: rightWidth + 'px' }">
-      <!-- 顶部工具栏 -->
-      <!-- <div class="toolbar">
-        <div class="tool-item" v-for="item in tools" :key="item">
-          {{ item }}
+    <div class="flex flex-col justify-end bg-[#F5F5F7] p-1 font-sf h-full" ref="box"
+      :style="{ width: rightWidth + 'px' }">
+
+      <div id="url-input-section" class="p-3 border-b border-[#D1D1D6]">
+        <label class="block text-[12px] font-medium text-[#86868B] mb-2 uppercase tracking-wide">Website URL</label>
+        <div class="flex gap-3">
+          <input type="text" placeholder="https://www.example.com" v-model="url"
+            class="mac-input flex-1 px-2 py-1.5 border border-[#D1D1D6] rounded-lg text-[12px] text-[#1D1D1F] focus:border-[#007AFF]">
+          <button @click="handleDownload"
+            class="mac-button bg-[#007AFF] text-white px-4 py-1.5 rounded-lg text-[12px] font-medium hover:bg-[#0051D5] active:bg-[#004FC4]">
+            Download
+          </button>
         </div>
-      </div> -->
-      <!-- URL 输入 -->
-      <div class="url-input">
-        <input type="text" placeholder="https://www.example.com" v-model="url" />
-        <button class="primary-btn" @click="handleDownload">Download</button>
       </div>
 
-      <div class="url-input">
-        <input type="text" v-model="downloadPath" placeholder="请选择下载保存路径" readonly />
-        <button class="primary-btn" @click="choosePath">保存位置</button>
-
-      </div>
-
-      <div class="settings">
-        <input type="checkbox" id="check-robots" v-model="robotsChecked" @change="onCheck($event)" />
-        <label for="check-robots">检查robots.txt</label>
-      </div>
-
-      <!-- 统计信息 -->
-      <div class="stats">
-        <div class="stat-item">Files Downloaded: {{ list.length }}</div>
-      </div>
-
-      <!-- 下载列表 -->
-      <div class="table">
-        <div class="table-header">
-          <span>Status</span>
-          <span>URL or Path</span>
-          <button class="operate-btn" @click="openFolder">Open</button>
+      <div id="save-location-section" class="p-3 border-b border-[#D1D1D6]">
+        <label class="block text-[12px] font-medium text-[#86868B] mb-2 uppercase tracking-wide">Save Location</label>
+        <div class="flex gap-3">
+          <input v-model="downloadPath" placeholder="请选择下载保存路径" readonly
+            class="mac-input flex-1 px-2 py-1.5 border border-[#D1D1D6] rounded-lg text-[12px] text-[#1D1D1F] focus:border-[#007AFF] bg-[#F5F5F7]" />
+          <button @click="choosePath"
+            class="mac-button bg-white border border-[#D1D1D6] text-[#1D1D1F] px-4 py-1.5 rounded-lg text-[12px] font-medium hover:bg-gray-50 active:bg-gray-100">
+            Choose Folder
+          </button>
+          <button @click="handleOpenFolder"
+            class="mac-button bg-[#007AFF] text-white px-4 py-1.5 rounded-lg text-[12px] font-medium hover:bg-[#0051D5] active:bg-[#004FC4]">
+            Open Folder
+          </button>
         </div>
+      </div>
 
-        <div class="table-row" v-for="item in list">
-          <span class="path">success</span>
-          <span class="path middle">{{ item.url }}</span>
-          <div>
-            <button class="operate-btn" @click="openSubFolder(item.filepath)">Open</button>
-            <button class="operate-btn" @click="copy(item.url)">Copy</button>
+      <div id="options-section" class="p-3 border-b border-[#D1D1D6] flex flex-row gap-3">
+
+        <div class="text-[10px] text-[#86868B]">
+          Files Downloaded: <span class="font-medium text-[#1D1D1F]">{{ list.length }}</span>
+        </div>
+        <div class="text-[10px] text-[#86868B]">
+          Fail Downloaded: <span class="font-medium text-[#1D1D1F]">{{ failCount }}</span>
+        </div>
+      </div>
+
+      <div class="p-3  border-[#D1D1D6] rounded-lg flex-1">
+        <div class="border border-[#D1D1D6] rounded-lg flex flex-col h-96" ref="listContainerRef">
+          <div class="bg-[#F5F5F7] px-4 py-2 border-b border-[#D1D1D6] rounded-tr-lg rounded-tl-lg shrink-0"
+            ref="listHeaderRef">
+            <div class="grid grid-cols-12 gap-3 text-[12px] font-medium text-[#86868B] uppercase tracking-wide">
+              <div class="col-span-2">Status</div>
+              <div class="col-span-7">Path</div>
+              <div class="col-span-3 text-right">Actions</div>
+            </div>
           </div>
+          <!--list列表--->
+          <div class="overflow-y-auto h-96" ref="listBodyRef">
+            <template v-for="item in list">
+              <div class="mac-table-row grid grid-cols-12 gap-3 px-4 py-3 border-b border-[#D1D1D6] items-center">
+                <div class="col-span-2">
 
+                  <span v-if="item.isSuccess"
+                    class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                    success
+                  </span>
+
+                  <span v-else class=" px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                    failed
+                  </span>
+
+
+                </div>
+                <div class="col-span-7 text-sm text-[#1D1D1F] truncate">{{ item.url }}</div>
+                <div class="col-span-3 flex gap-2 justify-end">
+                  <button class="text-[#007AFF] text-xs font-medium hover:underline"
+                    @click="openSubFolder(item.filepath)">Open</button>
+                  <button class="text-[#007AFF] text-xs font-medium hover:underline"
+                    @click="copy(item.url)">Copy</button>
+                </div>
+              </div>
+            </template>
+          </div>
         </div>
 
-
       </div>
+
 
     </div>
+
+
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount, onUnmounted } from 'vue'
+import { ref, onMounted, onBeforeUnmount, onUnmounted, nextTick, computed } from 'vue'
 
 const url = ref('')
 const robotsChecked = ref(true)
@@ -75,7 +109,7 @@ function handleDownload() {
   window.electronAPI.updateSubViewUrl(url.value)
 }
 
-const openFolder = async () => {
+const handleOpenFolder = async () => {
   const success = await window.api.openFolder(downloadPath.value)
   if (!success) {
     alert('打开失败，请检查路径是否正确')
@@ -83,9 +117,7 @@ const openFolder = async () => {
 }
 
 const copy = async (text) => {
-  console.log('copy', text)
   window.api.copyText(text)
-  alert('已复制到剪贴板')
 }
 
 const openSubFolder = async (filepath) => {
@@ -102,6 +134,14 @@ const box = ref(null)
 
 const list = ref([])
 
+const successCount = computed(() =>
+  list.value.filter(item => item.isSuccess).length
+)
+
+const failCount = computed(() =>
+  list.value.filter(item => !item.isSuccess).length
+)
+
 onMounted(() => {
   window.api.onItemAdd((item) => {
     // 关键：只追加增量
@@ -115,7 +155,6 @@ onMounted(() => {
     robotsChecked.value = checked
   })
 })
-
 
 function onCheck(event) {
   const target = event.target;
@@ -135,9 +174,9 @@ async function choosePath() {
 }
 
 const containerRef = ref(null);
-const rightWidth = ref(400);  // 初始宽度
+const rightWidth = ref(470);  // 初始宽度
 
-const MIN_RIGHT_WIDTH = 400;
+const MIN_RIGHT_WIDTH = 470;
 const DIVIDER_WIDTH = 6;
 
 let dragging = false;
@@ -191,17 +230,36 @@ const onMouseUp = () => {
 
 onUnmounted(onMouseUp);
 
+const listContainerRef = ref(null);
+const listHeaderRef = ref(null);
+const listBodyRef = ref(null);
+
+const bodyHeight = ref(0)
+
+const calcHeight = () => {
+  const containerH = listContainerRef.value.offsetHeight
+  const headerH = listHeaderRef.value.offsetHeight
+
+  bodyHeight.value = containerH - headerH
+  console.log('containerH', containerH, 'headerH', headerH, 'bodyHeight', bodyHeight.value)
+}
+
+onMounted(async () => {
+  await nextTick()
+  calcHeight()
+})
+
+
 </script>
 
 <style scoped>
-
-
 /* 整体布局 */
 .app-container {
   display: flex;
   height: 100vh;
   width: 100wh;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI";
+  display: flex;
 }
 
 /* 左侧网页区 */
@@ -389,5 +447,35 @@ onUnmounted(onMouseUp);
   width: 0%;
   height: 100%;
   background: #3b82f6;
+}
+
+
+.mac-input {
+  transition: all 0.15s ease;
+}
+
+.mac-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.15);
+}
+
+.mac-button {
+  transition: all 0.15s ease;
+}
+
+.mac-button:hover {
+  transform: translateY(-1px);
+}
+
+.mac-button:active {
+  transform: translateY(0);
+}
+
+.mac-table-row {
+  transition: background-color 0.1s ease;
+}
+
+.mac-table-row:hover {
+  background-color: rgba(0, 0, 0, 0.02);
 }
 </style>

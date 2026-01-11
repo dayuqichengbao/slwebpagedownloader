@@ -4,17 +4,25 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vue-tsc && vite build && electron-builder",
-    "preview": "vite preview"
+    "start": "vite build & electron-forge start",
+    "package": "vite build & electron-forge package",
+    "make": "vite build & electron-forge make",
+    "publish": "vite build & electron-forge publish",
+    "build": "vite build"
   },
   "dependencies": {
+    "@fontsource/inter": "^5.2.8",
     "@tailwindcss/vite": "^4.1.18",
     "electron-store": "^11.0.2",
     "tailwindcss": "^4.1.18",
     "vue": "^3.4.21"
   },
   "devDependencies": {
+    "@electron-forge/cli": "^7.10.2",
+    "@electron-forge/maker-deb": "^7.10.2",
+    "@electron-forge/maker-squirrel": "^7.10.2",
+    "@electron-forge/maker-dmg": "^7.10.2",
+    "@electron-forge/maker-zip": "^7.10.2",
     "@vitejs/plugin-vue": "^5.0.4",
     "electron": "^30.0.1",
     "electron-builder": "^24.13.3",
@@ -24,5 +32,42 @@
     "vite-plugin-electron-renderer": "^0.14.5",
     "vue-tsc": "^2.0.26"
   },
-  "main": "dist-electron/main.js"
+  "main": "dist-electron/main.js",
+  "config": {
+    "forge": {
+      "packagerConfig": {
+        "asar": true,
+        "icon": "public/icon"
+      },
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "electron_quick_start",
+            "setupIcon": "images/icon"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-dmg",
+          "config": {
+            "icon": "images/icon.icns"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {}
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {}
+        }
+      ]
+    }
+  }
 }

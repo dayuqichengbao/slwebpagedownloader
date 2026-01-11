@@ -1,4 +1,4 @@
-import { app, BrowserWindow, WebContentsView, ipcMain, dialog, shell, clipboard } from 'electron'
+import { app, BrowserWindow, WebContentsView, ipcMain, dialog, shell, clipboard, Menu, Tray } from 'electron'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 import fs from 'node:fs'
@@ -30,18 +30,6 @@ let win: BrowserWindow | null
 
 const TARGET_URL = "https://example.com";
 
-
-// function getDefaultDownloadPath(): string {
-//   const defaultDir =
-//     os.platform() === 'win32'
-//       ? 'C:\\Users\\Public\\Downloads'
-//       : '~/Downloads'
-
-//   const dir = path.join(defaultDir, "web-downloader", "output");
-//   ensureDir(dir);
-//   return dir;
-
-// }
 
 let currentDownloadUrl: string = '';
 
@@ -89,12 +77,29 @@ function getMime(response: any): string {
 let subView: WebContentsView
 let mainWin: BrowserWindow
 
+function createTray() {
+  console.log("Creating system tray icon.", path.join(process.env.VITE_PUBLIC, 'icon.png'));
+  const tray = new Tray(path.join(process.env.VITE_PUBLIC, 'icon.png'));
+
+  const contextMenu = Menu.buildFromTemplate([
+    { label: '显示', click: () => {/* show window */ } },
+    { label: '退出', click: () => app.quit() }
+  ]);
+
+  tray.setToolTip('My App');
+  tray.setContextMenu(contextMenu);
+}
+
 
 function createWindow() {
+
+  console.log("Creating main window.", path.join(process.env.VITE_PUBLIC, 'icon.png'));
+
   win = new BrowserWindow({
-    icon: path.join(process.env.VITE_PUBLIC, 'electron-vite.svg'),
+    icon: path.join(process.env.VITE_PUBLIC, 'icon.png'),
     title: 'QCSiteDownloader',
     width: 1420,
+    height: 680,
     webPreferences: {
       preload: path.join(__dirname, 'preload.mjs'),
       nodeIntegration: false,
@@ -139,8 +144,28 @@ function createWindow() {
   client.sendCommand("Page.enable");
 
   // 资源抓取（JS / CSS / IMG / XHR / HTML 子资源）
-
+  const requestMap = new Map();
   client.on("message", async (_event, method, params) => {
+
+    if (method === "Network.requestWillBeSent") {
+      requestMap.set(params.requestId, params.request.url);
+      return;
+    }
+
+
+
+    if (method == "Network.loadingFailed") {
+      const requestUrl: string = requestMap.get(params.requestId);
+      requestMap.delete(params.requestId);
+
+      win?.webContents.send('item-add', {
+        "url": requestUrl,
+        "filepath": "",
+        'isSuccess': false,
+      })
+
+      return;
+    }
 
     if (currentDownloadUrl == '' || currentDownloadUrl == TARGET_URL || currentDownloadUrl == 'localhost') {
       return;
@@ -152,6 +177,15 @@ function createWindow() {
     const url = response.url;
 
     if (!url.startsWith("http")) return;
+
+    if (response.status >= 400) {
+      win?.webContents.send('item-add', {
+        "url": url,
+        "filepath": "",
+        'isSuccess': false,
+      })
+      return
+    }
 
     try {
       const body = await client.sendCommand(
@@ -197,7 +231,8 @@ function createWindow() {
 
       win?.webContents.send('item-add', {
         "url": url,
-        "filepath": filePath
+        "filepath": filePath,
+        'isSuccess': true,
       })
     } catch {
       // streaming / ws / large media ignore
@@ -227,13 +262,13 @@ function createWindow() {
       const htmlPath = path.join(domainDir, "index.html");
 
       fs.writeFileSync(htmlPath, htmlstr, "utf-8");
-      console.log("Saved HTML:", htmlPath);
       win.webContents.send('item-add', {
         "url": viewA.webContents.getURL(),
-        "filepath": htmlPath
+        "filepath": htmlPath,
+        "isSuccess": true,
       })
 
-      // ⭐ 关键：给 XHR 留时间
+      // 给 XHR 留时间
       setTimeout(() => {
         console.log("Capture complete, exiting.");
       }, 15000);
@@ -304,21 +339,20 @@ ipcMain.handle('get-robots-checked', () => {
   return settingsStore.get('checkRobots');
 })
 
-let shellWidth = 470   // 左侧 Shell 当前宽度（px）
+let shellWidth = 480   // 左侧 Shell 当前宽度（px）
 
 function applyLayout() {
   const { width, height } = mainWin.getContentBounds()
-
   subView.setBounds({
     x: 0,
     y: 0,
-    width: width - shellWidth - 40,
+    width: width - shellWidth - 6,
     height
   })
 }
 
 ipcMain.on("shell-width-changed", (_, width) => {
-  shellWidth = width + 40
+  shellWidth = width
   console.log("Shell width changed:", shellWidth)
   applyLayout()
 })
@@ -360,4 +394,7 @@ app.on('activate', () => {
   }
 })
 
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+  createWindow();
+  createTray();
+});
