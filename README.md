@@ -11,7 +11,6 @@
 - 保留目录结构：按 URL 路径在本地重建目录并自动补全常见扩展名（html/js/css/json 等）。
 - 内置浏览器视图与操作面板：左侧为页面视图，右侧为操作区（URL 输入、下载、保存位置、资源列表），界面实现位于 `src/App.vue`。
 - 交互操作：支持选择保存目录、打开已下载文件夹、复制资源链接、查看成功/失败统计。
-- IPC 支持：渲染进程与主进程通过 IPC 交互实现路径选择、复制剪贴板、更新子视图 URL 等操作。
 
 ## 快速开始
 - 安装依赖：
@@ -56,3 +55,63 @@ npm run dist
 
 欢迎贡献：fork → 新分支 → 提交 PR → 代码审查合并。
 建议改进方向：并发下载队列、失败重试机制、扩展 mime/type 识别、下载进度反馈、robots.txt 策略支持等。
+
+## English Translation
+
+# QCSiteDownloader
+
+An Electron-based static web resource downloader. It loads the target web page in an embedded browser view, intercepts and saves the page and its sub-resources (JS/CSS/images/XHR/HTML), and stores them locally preserving the original URL path structure for convenient offline viewing and analysis.
+
+## Overview
+- Purpose: Capture a target site as local static resources while preserving URL path structure.
+- Use cases: web archiving, offline browsing, front-end resource auditing and analysis.
+
+## Main Features
+- Resource capture: Loads pages in an embedded browser view and captures the page and its sub-resources (see `electron/main.ts` for details).
+- Preserve directory structure: Reconstructs directories locally according to URL paths and automatically completes common file extensions (html/js/css/json, etc.).
+- Embedded browser view and control panel: Left side shows the page view; right side contains controls (URL input, download, save location, resource list). UI implementation is in `src/App.vue`.
+- Interactions: Supports selecting a save folder, opening the downloaded folder, copying resource URLs, and viewing success/failure statistics.
+
+## Quick Start
+- Install dependencies:
+
+```bash
+npm install
+```
+
+- Development (hot reload):
+
+```bash
+npm run start
+```
+
+- Build and package (uses project scripts):
+
+```bash
+npm run build
+npm run dist
+```
+
+## Usage
+
+Enter the target website URL in the input field on the right (for example, https://example.com).
+(Optional) Click Choose Folder to select a save directory; if not selected, the default download directory is used (on macOS usually `~/Downloads`).
+Click Download; the app will load the page in the left view and start capturing resources.
+The capture results appear in the right-hand list: status (success/failed), resource URL, file path, with options to Open (reveal in folder) and Copy (copy URL).
+
+## Configuration and Storage
+
+Download directory: controlled by the `downloadPath` setting; if unset, the system default download directory is used.
+Storage path example: `<downloadRoot>/webdownloader/<downloadHostname>/<resourceHostname>/...`.
+Settings are stored in the project's `electron/store` directory (see the files there for implementation details).
+
+## Known Limitations & Notes
+
+Large streams, WebSocket traffic, or very large response bodies may be ignored.
+File system write permissions are required for the capture process; on macOS ensure Electron has the necessary permissions.
+The current implementation lacks advanced concurrency control, retry logic, and download progress indicators; high concurrency or network interruptions may result in failed entries.
+
+## Contributing
+
+Contributions welcome: fork → new branch → submit PR → code review & merge.
+Suggested improvements: add concurrent download queues, retry mechanisms, extend mime/type recognition, provide download progress, and support robots.txt policies.
