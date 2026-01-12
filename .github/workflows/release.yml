@@ -10,11 +10,12 @@ permissions:
   contents: write
 
 jobs:
-  # 1️⃣ Build & Create Release on macOS
-  build_release:
-    runs-on: macos-latest
-    outputs:
-      upload_url: ${{ steps.create_release.outputs.upload_url }}
+  publish:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest]
+
     steps:
       - uses: actions/checkout@v4
 
@@ -24,79 +25,11 @@ jobs:
           node-version: 18
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
-      - name: Electron Forge Package
-        run: npm run package
-
-      - name: Electron Forge Make (macOS)
-        run: npx electron-forge make
+      - name: Publish with Electron Forge
+        run: npx electron-forge publish
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ELECTRON_SKIP_SIGN: true
           ELECTRON_SKIP_NOTARIZE: true
-
-      - name: Zip macOS build
-        run: |
-          mkdir -p out/zipped
-          zip -r out/zipped/macos-latest.zip out/make/*
-
-      - name: Create GitHub Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref_name }}
-          release_name: Release ${{ github.ref_name }}
-          draft: false
-          prerelease: false
-
-      - name: Upload macOS asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: out/zipped/macos-latest.zip
-          asset_name: macos-latest-build.zip
-          asset_content_type: application/zip
-
-  # 2️⃣ Build Windows & upload to the same Release
-  build_windows:
-    runs-on: windows-latest
-    needs: build_release  # 等 macOS job 完成，拿到 upload_url
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Electron Forge Package
-        run: npm run package
-
-      - name: Electron Forge Make (Windows)
-        run: npx electron-forge make
-        env:
-          ELECTRON_SKIP_SIGN: true
-          ELECTRON_SKIP_NOTARIZE: true
-
-      - name: Zip Windows build
-        run: |
-          New-Item -ItemType Directory -Force -Path out\zipped
-          Compress-Archive -Path out\make\* -DestinationPath out\zipped\windows-latest.zip
-        shell: powershell
-
-      - name: Upload Windows asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.build_release.outputs.upload_url }}
-          asset_path: out\zipped\windows-latest.zip
-          asset_name: windows-latest-build.zip
-          asset_content_type: application/zip

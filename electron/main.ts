@@ -1,4 +1,5 @@
 import { app, BrowserWindow, WebContentsView, ipcMain, dialog, shell, clipboard, Menu, Tray } from 'electron'
+import { autoUpdater } from 'electron-updater';
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 import fs from 'node:fs'
@@ -397,4 +398,10 @@ app.on('activate', () => {
 app.whenReady().then(() => {
   createWindow();
   createTray();
+  autoUpdater.setFeedURL({
+    provider: 'github',
+    owner: 'dayuqichengbao',
+    repo: 'slwebpagedownloader'
+  });
+  autoUpdater.checkForUpdatesAndNotify();
 });

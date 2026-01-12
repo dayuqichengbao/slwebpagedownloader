@@ -20,6 +20,7 @@
     "@fontsource/inter": "^5.2.8",
     "@tailwindcss/vite": "^4.1.18",
     "electron-store": "^11.0.2",
+    "electron-updater": "^6.7.3",
     "tailwindcss": "^4.1.18",
     "vue": "^3.4.21"
   },
@@ -59,6 +60,12 @@
             "name": "slwebpagedownloader",
             "setupIcon": "public/icon.ico"
           }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin"
+          ]
         }
       ],
       "publishers": [
@@ -69,7 +76,8 @@
               "owner": "dayuqichengbao",
               "name": "slwebpagedownloader"
             },
-            "prerelease": false
+            "prerelease": false,
+            "draft": false
           }
         }
       ]
