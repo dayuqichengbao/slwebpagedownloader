@@ -1,7 +1,7 @@
 {
   "name": "slwebpagedownloader",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
     "start": "vite build & electron-forge start",
@@ -60,11 +60,7 @@
           "config": {
             "repository": {
               "owner": "Shawn Liu",
-<<<<<<< HEAD
               "name": "https://github.com/dayuqichengbao/slwebpagedownloader"
-=======
-              "name": "仓库名"
->>>>>>> 84f50d5 (add github publisher)
             },
             "prerelease": false
           }
