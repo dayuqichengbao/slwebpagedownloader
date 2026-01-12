@@ -51,6 +51,7 @@ jobs:
         uses: actions/create-release@v1
         with:
           tag_name: ${{ github.ref_name }}
+          token: ${{ secrets.GITHUB_TOKEN }} 
           release_name: Release ${{ github.ref_name }}
           draft: false
           prerelease: false
@@ -64,3 +65,4 @@ jobs:
           asset_path: out/zipped/${{ matrix.os }}.zip
           asset_name: ${{ matrix.os }}-build.zip
           asset_content_type: application/zip
+          token: ${{ secrets.GITHUB_TOKEN }} 
