@@ -37,11 +37,9 @@ let currentDownloadUrl: string = '';
 function getDownloadRootDir(): string {
   let settingDir = settingsStore.get('downloadPath');
   if (settingDir == null || settingDir.trim() == '') {
-    const defaultDir =
-      os.platform() === 'win32'
-        ? 'C:\\Users\\Public\\Downloads'
-        : '~/Downloads'
-    return defaultDir;
+    const downloadPath = app.getPath('downloads');
+    console.log(downloadPath)
+    return downloadPath;
   }
   ensureDir(settingDir);
   return settingDir;
@@ -77,19 +75,6 @@ function getMime(response: any): string {
 
 let subView: WebContentsView
 let mainWin: BrowserWindow
-
-// function createTray() {
-//   console.log("Creating system tray icon.", path.join(process.env.VITE_PUBLIC, 'icon.png'));
-//   const tray = new Tray(path.join(process.env.VITE_PUBLIC, 'icon.png'));
-
-//   const contextMenu = Menu.buildFromTemplate([
-//     { label: '显示', click: () => {/* show window */ } },
-//     { label: '退出', click: () => app.quit() }
-//   ]);
-
-//   tray.setToolTip('My App');
-//   tray.setContextMenu(contextMenu);
-// }
 
 
 function createWindow() {
@@ -392,36 +377,39 @@ app.on('activate', () => {
 
 app.whenReady().then(() => {
   createWindow();
-  // createTray();
 
-  // dev mode check
-  if (!app.isPackaged) return;
   autoUpdater.setFeedURL({
     provider: 'github',
     owner: 'dayuqichengbao',
     repo: 'slwebpagedownloader'
   });
+
   autoUpdater.checkForUpdatesAndNotify();
 });
 
 
 autoUpdater.on('checking-for-update', () => {
+  console.log("Checking...");
   sendStatus('checking');
 });
 
 autoUpdater.on('update-available', () => {
+  console.log("Update available.");
   sendStatus('available');
 });
 
 autoUpdater.on('update-not-available', () => {
+  console.log("Update not available.");
   sendStatus('not-available');
 });
 
 autoUpdater.on('download-progress', (p) => {
+  console.log(`Download progress: ${Math.round(p.percent)}%`);
   sendStatus('progress', Math.round(p.percent));
 });
 
 autoUpdater.on('update-downloaded', () => {
+  console.log("Update downloaded.");
   sendStatus('downloaded');
 
   dialog.showMessageBox({
@@ -437,6 +425,7 @@ autoUpdater.on('update-downloaded', () => {
 });
 
 autoUpdater.on('error', (err) => {
+  console.error("Update error:", err);
   sendStatus('error', err.message);
 });
 
