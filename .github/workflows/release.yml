@@ -35,12 +35,12 @@ jobs:
       - name: Electron Forge Make
         run: npx electron-forge make
         env:
-          ELECTRON_SKIP_SIGN: true          # 跳过 macOS 签名
-          ELECTRON_SKIP_NOTARIZE: true      # 跳过 macOS notarize
+          ELECTRON_SKIP_SIGN: true          # skip code signing
+          ELECTRON_SKIP_NOTARIZE: true      # skip notarization
 
-      # 上传构建产物
+      # upload build artifacts
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: electron-build-${{ matrix.os }}
           path: out/make/**/*
