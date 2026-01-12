@@ -27,7 +27,20 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Make & Publish
-        run: npx electron-forge publish
+     # Package Electron app
+      - name: Electron Forge Package
+        run: npm run package
+
+      # Make Electron app (ad-hoc)
+      - name: Electron Forge Make
+        run: npx electron-forge make
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ELECTRON_SKIP_SIGN: true          # 跳过 macOS 签名
+          ELECTRON_SKIP_NOTARIZE: true      # 跳过 macOS notarize
+
+      # 上传构建产物
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: electron-build-${{ matrix.os }}
+          path: out/make/**/*
