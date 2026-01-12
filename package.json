@@ -41,12 +41,7 @@
         "icon": "public/icon"
       },
       "makers": [
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "setupIcon": "public/icon"
-          }
-        },
+      
         {
           "name": "@electron-forge/maker-dmg",
           "config": {
