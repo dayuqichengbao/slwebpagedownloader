@@ -41,7 +41,7 @@
         "icon": "public/icon"
       },
       "makers": [
-      
+  
         {
           "name": "@electron-forge/maker-dmg",
           "config": {
@@ -55,7 +55,7 @@
           "config": {
             "repository": {
               "owner": "Shawn Liu",
-              "name": "https://github.com/dayuqichengbao/slwebpagedownloader"
+              "name": "slwebpagedownloader"
             },
             "prerelease": false
           }
