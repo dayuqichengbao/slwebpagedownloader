@@ -27,6 +27,9 @@ jobs:
       - name: Build with Vite
         run: npx vite build
 
+      - name: Make
+        run: npx electron-forge make
+
       - name: Make & Publish
         run: npx electron-forge publish
         env:
