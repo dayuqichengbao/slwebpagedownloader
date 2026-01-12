@@ -3,6 +3,11 @@
   "private": true,
   "version": "0.0.1",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dayuqichengbao/slwebpagedownloader.git"
+  },
+  "author": "Shawn Liu",
   "scripts": {
     "start": "vite build & electron-forge start",
     "package": "vite build & electron-forge package",
@@ -41,7 +46,6 @@
         "icon": "public/icon"
       },
       "makers": [
-  
         {
           "name": "@electron-forge/maker-dmg",
           "config": {
@@ -54,7 +58,7 @@
           "name": "@electron-forge/publisher-github",
           "config": {
             "repository": {
-              "owner": "Shawn Liu",
+              "owner": "dayuqichengbao",
               "name": "slwebpagedownloader"
             },
             "prerelease": false
