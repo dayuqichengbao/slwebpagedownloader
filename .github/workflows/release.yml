@@ -1,6 +1,9 @@
 name: Build and Publish (Electron Forge)
 
 on:
+  push:
+    tags:
+      - "v*.*.*"
   workflow_dispatch:
 
 permissions:

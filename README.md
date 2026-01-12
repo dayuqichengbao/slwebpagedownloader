@@ -37,6 +37,10 @@ npm run dist
 
 ## 使用说明
 
+macOS 首次运行：
+`sudo xattr -dr com.apple.quarantine /Applications/slwebpagedownloader.app`
+
+
 在右侧输入框中输入目标网站 URL（例如 https://example.com）。
 （可选）点击 Choose Folder 选择保存目录；若不选择则使用默认下载目录（macOS 通常为 ~/Downloads）。
 点击 Download，应用将在左侧视图加载页面并开始抓取资源。
@@ -98,6 +102,10 @@ npm run dist
 ```
 
 ## Usage
+
+macOS first run：
+`sudo xattr -dr com.apple.quarantine /Applications/slwebpagedownloader.app`
+
 
 Enter the target website URL in the input field on the right (for example, https://example.com).
 (Optional) Click Choose Folder to select a save directory; if not selected, the default download directory is used (on macOS usually `~/Downloads`).
