@@ -39,10 +39,16 @@ jobs:
           ELECTRON_SKIP_NOTARIZE: true      # skip notarization
 
       # Zip the build output (可选，方便 Release 上传)
+      # Zip build output cross-platform
       - name: Zip build output
         run: |
-          mkdir -p out/zipped
-          zip -r out/zipped/${{ matrix.os }}.zip out/make/*
+          if [ ${{ matrix.os }} == 'windows-latest' ]; then
+            powershell Compress-Archive -Path out/make/* -DestinationPath out/zipped/windows-latest.zip
+          else
+            mkdir -p out/zipped
+            zip -r out/zipped/macos-latest.zip out/make/*
+          fi
+        shell: bash
 
       # Create GitHub Release (only on tag push)
       - name: Create GitHub Release
