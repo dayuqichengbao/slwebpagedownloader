@@ -60,7 +60,11 @@
           "config": {
             "repository": {
               "owner": "Shawn Liu",
+<<<<<<< HEAD
               "name": "https://github.com/dayuqichengbao/slwebpagedownloader"
+=======
+              "name": "仓库名"
+>>>>>>> 84f50d5 (add github publisher)
             },
             "prerelease": false
           }
