@@ -78,23 +78,21 @@ function getMime(response: any): string {
 let subView: WebContentsView
 let mainWin: BrowserWindow
 
-function createTray() {
-  console.log("Creating system tray icon.", path.join(process.env.VITE_PUBLIC, 'icon.png'));
-  const tray = new Tray(path.join(process.env.VITE_PUBLIC, 'icon.png'));
+// function createTray() {
+//   console.log("Creating system tray icon.", path.join(process.env.VITE_PUBLIC, 'icon.png'));
+//   const tray = new Tray(path.join(process.env.VITE_PUBLIC, 'icon.png'));
 
-  const contextMenu = Menu.buildFromTemplate([
-    { label: '显示', click: () => {/* show window */ } },
-    { label: '退出', click: () => app.quit() }
-  ]);
+//   const contextMenu = Menu.buildFromTemplate([
+//     { label: '显示', click: () => {/* show window */ } },
+//     { label: '退出', click: () => app.quit() }
+//   ]);
 
-  tray.setToolTip('My App');
-  tray.setContextMenu(contextMenu);
-}
+//   tray.setToolTip('My App');
+//   tray.setContextMenu(contextMenu);
+// }
 
 
 function createWindow() {
-
-  console.log("Creating main window.", path.join(process.env.VITE_PUBLIC, 'icon.png'));
 
   win = new BrowserWindow({
     icon: path.join(process.env.VITE_PUBLIC, 'icon.png'),
@@ -289,9 +287,6 @@ function createWindow() {
     applyLayout()
   })
 
-  // ⭐ 默认打开 DevTools
-  // win.webContents.openDevTools();
-
   if (VITE_DEV_SERVER_URL) {
     win.loadURL(VITE_DEV_SERVER_URL)
   } else {
@@ -397,7 +392,10 @@ app.on('activate', () => {
 
 app.whenReady().then(() => {
   createWindow();
-  createTray();
+  // createTray();
+
+  // dev mode check
+  if (!app.isPackaged) return;
   autoUpdater.setFeedURL({
     provider: 'github',
     owner: 'dayuqichengbao',
@@ -405,3 +403,43 @@ app.whenReady().then(() => {
   });
   autoUpdater.checkForUpdatesAndNotify();
 });
+
+
+autoUpdater.on('checking-for-update', () => {
+  sendStatus('checking');
+});
+
+autoUpdater.on('update-available', () => {
+  sendStatus('available');
+});
+
+autoUpdater.on('update-not-available', () => {
+  sendStatus('not-available');
+});
+
+autoUpdater.on('download-progress', (p) => {
+  sendStatus('progress', Math.round(p.percent));
+});
+
+autoUpdater.on('update-downloaded', () => {
+  sendStatus('downloaded');
+
+  dialog.showMessageBox({
+    type: 'info',
+    title: '更新完成',
+    message: '新版本已下载，是否立即重启安装？',
+    buttons: ['重启', '稍后']
+  }).then(res => {
+    if (res.response === 0) {
+      autoUpdater.quitAndInstall();
+    }
+  });
+});
+
+autoUpdater.on('error', (err) => {
+  sendStatus('error', err.message);
+});
+
+function sendStatus(type: string, data?: any) {
+  mainWin.webContents.send('update-status', { type, data });
+}
