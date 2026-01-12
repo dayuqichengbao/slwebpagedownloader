@@ -1,6 +1,10 @@
 # QCSiteDownloader
 
-一个基于 Electron 的网页静态资源下载器。在内置浏览器视图中加载目标网页，拦截并保存页面及其子资源（JS/CSS/图片/XHR/HTML），按原始路径结构存储到本地，方便离线查看与分析。
+## 中文说明
+
+一个基于 Electron 的网页静态资源下载器。在内置浏览器视图中加载目标网页，支持在动态交互中拦截url，并保存页面及其子资源（JS/CSS/图片/XHR/HTML），按原始路径结构存储到本地，方便离线查看与分析。
+
+![demo](./public/screen-shot.gif)  
 
 ## 简述
 - 目的：将目标站点抓取为本地静态资源并保留 URL 路径结构。
@@ -41,8 +45,7 @@ npm run dist
 ## 配置与存储
 
 下载目录：由设置项 downloadPath 控制；未设置时使用系统默认下载目录。
-存储路径示例：<downloadRoot>/webdownloader/<downloadHostname>/<resourceHostname>/...。
-设置存储位于项目的 electron/store 目录（查看对应文件了解实现）。
+存储路径示例：~/Download/webdownloader/
 
 ## 已知限制与注意事项
 
@@ -56,11 +59,13 @@ npm run dist
 欢迎贡献：fork → 新分支 → 提交 PR → 代码审查合并。
 建议改进方向：并发下载队列、失败重试机制、扩展 mime/type 识别、下载进度反馈、robots.txt 策略支持等。
 
-## English Translation
+## English Description
 
 # QCSiteDownloader
 
 An Electron-based static web resource downloader. It loads the target web page in an embedded browser view, intercepts and saves the page and its sub-resources (JS/CSS/images/XHR/HTML), and stores them locally preserving the original URL path structure for convenient offline viewing and analysis.
+
+![demo](./public/screen-shot.gif) 
 
 ## Overview
 - Purpose: Capture a target site as local static resources while preserving URL path structure.
@@ -103,7 +108,6 @@ The capture results appear in the right-hand list: status (success/failed), reso
 
 Download directory: controlled by the `downloadPath` setting; if unset, the system default download directory is used.
 Storage path example: `<downloadRoot>/webdownloader/<downloadHostname>/<resourceHostname>/...`.
-Settings are stored in the project's `electron/store` directory (see the files there for implementation details).
 
 ## Known Limitations & Notes
 
