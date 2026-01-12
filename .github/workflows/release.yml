@@ -1,9 +1,7 @@
 name: Build and Publish (Electron Forge)
 
 on:
-  push:
-    tags:
-      - "v*.*.*"
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -24,7 +22,10 @@ jobs:
           node-version: 18
 
       - name: Install dependencies
-        run: npm install & vite build 
+        run: npm install
+      
+      - name: Build with Vite
+        run: npx vite build
 
       - name: Make & Publish
         run: npx electron-forge publish
