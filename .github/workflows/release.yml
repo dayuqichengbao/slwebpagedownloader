@@ -40,15 +40,20 @@ jobs:
 
       # Zip the build output (可选，方便 Release 上传)
       # Zip build output cross-platform
-      - name: Zip build output
+      # macOS zip
+      - name: Zip macOS build
+        if: matrix.os == 'macos-latest'
         run: |
-          if [ ${{ matrix.os }} == 'windows-latest' ]; then
-            powershell Compress-Archive -Path out/make/* -DestinationPath out/zipped/windows-latest.zip
-          else
-            mkdir -p out/zipped
-            zip -r out/zipped/macos-latest.zip out/make/*
-          fi
-        shell: bash
+          mkdir -p out/zipped
+          zip -r out/zipped/macos-latest.zip out/make/*
+
+      # Windows zip
+      - name: Zip Windows build
+        if: matrix.os == 'windows-latest'
+        run: |
+          New-Item -ItemType Directory -Force -Path out\zipped
+          Compress-Archive -Path out\make\* -DestinationPath out\zipped\windows-latest.zip
+        shell: powershell 
 
       # Create GitHub Release (only on tag push)
       - name: Create GitHub Release
