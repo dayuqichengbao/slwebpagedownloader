@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.1",
   "type": "module",
+  "description": "A simple tool to download web pages",
   "repository": {
     "type": "git",
     "url": "https://github.com/dayuqichengbao/slwebpagedownloader.git"
@@ -55,6 +56,7 @@
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
+            "name": "slwebpagedownloader",
             "setupIcon": "public/icon.ico"
           }
         }
