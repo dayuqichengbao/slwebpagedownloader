@@ -1,7 +1,7 @@
 {
   "name": "slwebpagedownloader",
   "private": true,
-  "version": "0.0.11",
+  "version": "0.0.1",
   "type": "module",
   "description": "A simple tool to download web pages",
   "repository": {
