@@ -1,9 +1,7 @@
-import { app, BrowserWindow, WebContentsView, ipcMain, dialog, shell, clipboard, Menu, Tray } from 'electron'
-import { autoUpdater } from 'electron-updater';
+import { app, BrowserWindow, WebContentsView, ipcMain, dialog, shell, clipboard, } from 'electron'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 import fs from 'node:fs'
-import os from 'os'
 import { settingsStore } from './store';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -377,57 +375,4 @@ app.on('activate', () => {
 
 app.whenReady().then(() => {
   createWindow();
-
-  autoUpdater.setFeedURL({
-    provider: 'github',
-    owner: 'dayuqichengbao',
-    repo: 'slwebpagedownloader'
-  });
-  autoUpdater.checkForUpdatesAndNotify();
 });
-
-
-autoUpdater.on('checking-for-update', () => {
-  console.log("Checking...");
-  sendStatus('checking');
-});
-
-autoUpdater.on('update-available', () => {
-  console.log("Update available.");
-  sendStatus('available');
-});
-
-autoUpdater.on('update-not-available', () => {
-  console.log("Update not available.");
-  sendStatus('not-available');
-});
-
-autoUpdater.on('download-progress', (p) => {
-  console.log(`Download progress: ${Math.round(p.percent)}%`);
-  sendStatus('progress', Math.round(p.percent));
-});
-
-autoUpdater.on('update-downloaded', () => {
-  console.log("Update downloaded.");
-  sendStatus('downloaded');
-
-  dialog.showMessageBox({
-    type: 'info',
-    title: '更新完成',
-    message: '新版本已下载，是否立即重启安装？',
-    buttons: ['重启', '稍后']
-  }).then(res => {
-    if (res.response === 0) {
-      autoUpdater.quitAndInstall();
-    }
-  });
-});
-
-autoUpdater.on('error', (err) => {
-  console.error("Update error:", err);
-  sendStatus('error', err.message);
-});
-
-function sendStatus(type: string, data?: any) {
-  mainWin.webContents.send('update-status', { type, data });
-}
