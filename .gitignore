@@ -13,6 +13,8 @@ dist-electron
 dist-ssr
 *.local
 
+dist-electron/*
+
 # Editor directories and files
 .idea
 .DS_Store
