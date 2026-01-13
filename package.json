@@ -11,7 +11,7 @@
   "author": "Shawn Liu",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc && vite build && electron-builder",
+    "build": "vue-tsc && vite build && electron-builder --publish never",
     "preview": "vite preview",
     "package-win": "electron-builder -w appx:x64 && electron-builder -w appx:ia32 && electron-builder -w appx:arm64",
     "package-win-ci": "electron-builder -w --x64 -p never && electron-builder -w --ia32 -p never",

@@ -31,8 +31,8 @@ jobs:
       - name: Build frontend & types
         run: npm run build
 
-      # 5. Package macOS Universal
-      - name: Package macOS Universal
+      # 5. Package macOS
+      - name: Package macOS
         run: npm run package-mac
 
       # 6. Create GitHub Release (if triggered by tag)
