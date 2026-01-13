@@ -36,7 +36,6 @@ function getDownloadRootDir(): string {
   let settingDir = settingsStore.get('downloadPath');
   if (settingDir == null || settingDir.trim() == '') {
     const downloadPath = app.getPath('downloads');
-    console.log(downloadPath)
     return downloadPath;
   }
   ensureDir(settingDir);
@@ -284,7 +283,6 @@ function createWindow() {
 ipcMain.handle('update-subview-url', (_, url) => {
   if (subView && url) {
     currentDownloadUrl = url;
-    console.log("Updating subView URL to:", url)
     subView.webContents.loadURL(url)
   }
 })
@@ -332,7 +330,6 @@ function applyLayout() {
 
 ipcMain.on("shell-width-changed", (_, width) => {
   shellWidth = width
-  console.log("Shell width changed:", shellWidth)
   applyLayout()
 })
 

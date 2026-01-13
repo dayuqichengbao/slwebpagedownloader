@@ -25,20 +25,17 @@ npm install
 - 开发模式（热重载）：
 
 ```bash
-npm run start
+npm run dev
 ```
 
 - 构建与打包（依赖项目 scripts）：
   
 ```bash
 npm run build
-npm run dist
+npm run package-xxx
 ```
 
 ## 使用说明
-
-macOS 首次运行：
-`sudo xattr -dr com.apple.quarantine /Applications/slwebpagedownloader.app`
 
 
 在右侧输入框中输入目标网站 URL（例如 https://example.com）。
@@ -91,20 +88,17 @@ npm install
 - Development (hot reload):
 
 ```bash
-npm run start
+npm run dev
 ```
 
 - Build and package (uses project scripts):
 
 ```bash
 npm run build
-npm run dist
+npm run package-xxx
 ```
 
 ## Usage
-
-macOS first run：
-`sudo xattr -dr com.apple.quarantine /Applications/slwebpagedownloader.app`
 
 
 Enter the target website URL in the input field on the right (for example, https://example.com).
