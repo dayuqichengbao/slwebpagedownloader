@@ -383,7 +383,6 @@ app.whenReady().then(() => {
     owner: 'dayuqichengbao',
     repo: 'slwebpagedownloader'
   });
-
   autoUpdater.checkForUpdatesAndNotify();
 });
 

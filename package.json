@@ -10,11 +10,11 @@
   },
   "author": "Shawn Liu",
   "scripts": {
-    "start": "electron-forge start",
+    "start": "vite & electron-forge start",
+    "build:renderer": "vite build",
     "package": "electron-forge package",
-    "make": "electron-forge make",
-    "publish": "electron-forge publish",
-    "build": "vite build"
+    "make": "npm run build:renderer && electron-forge make",
+    "publish": "npm run build:renderer && electron-forge publish"
   },
   "dependencies": {
     "@fontsource/inter": "^5.2.8",
