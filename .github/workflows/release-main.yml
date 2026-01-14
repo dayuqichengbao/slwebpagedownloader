@@ -78,7 +78,10 @@ jobs:
         run: npm install
 
       - name: Build frontend & types
-        run: npm run build
+        run: |
+          rmdir /s /q node_modules
+          del package-lock.json
+          npm install
 
       - name: Package Windows x64 + ia32
         run: npm run package-win-ci
