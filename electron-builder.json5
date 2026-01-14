@@ -4,7 +4,7 @@
     "asar": true,
     "productName": "slwebpagedownloader",
     "directories": {
-        "output": "release/${version}"
+        "output": "release/v${version}"
     },
     "files": [
         "dist",
