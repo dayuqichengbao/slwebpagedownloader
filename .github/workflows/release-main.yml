@@ -55,7 +55,7 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v1
         with:
-          files: release/${{ github.ref_name }}/slwebpagedownloader-Mac-*-${{ github.ref_name }}-Installer.dmg
+          files: release/${{ github.ref_name }}/slwebpagedownloader-Mac-*-Installer.dmg
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -91,6 +91,6 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v1
         with:
-          files: release/${{ github.ref_name }}/slwebpagedownloader-Windows-${{ github.ref_name }}-Setup.exe
+          files: release/${{ github.ref_name }}/slwebpagedownloader-Windows-Setup.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

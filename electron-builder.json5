@@ -21,7 +21,7 @@
                 ]
             }
         ],
-        "artifactName": "${productName}-Mac-${arch}-${version}-Installer.${ext}"
+        "artifactName": "${productName}-Mac-${arch}-Installer.${ext}"
     },
     "win": {
         "icon": "public/icon.ico",
@@ -33,7 +33,7 @@
                 ]
             }
         ],
-        "artifactName": "${productName}-Windows-${version}-Setup.${ext}"
+        "artifactName": "${productName}-Windows-Setup.${ext}"
     },
     "nsis": {
         "oneClick": false,
