@@ -74,9 +74,13 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
-      - name: npm install
-        run: npm install
-
+      - name: Clean install dependencies
+        shell: pwsh
+        run: |
+          if (Test-Path node_modules) { Remove-Item node_modules -Recurse -Force }
+          if (Test-Path package-lock.json) { Remove-Item package-lock.json -Force }
+          npm install
+          
       - name: Build frontend & types
         run: npm run build
 
