@@ -1,13 +1,52 @@
 @import "tailwindcss";
 
+:root {
+  /* Brand */
+  --color-primary: #3B82F6;
+  --color-primary-hover: #2563EB;
+  --color-secondary: #60A5FA;
+  
+  /* Functional */
+  --color-success: #10B981;
+  --color-warning: #F59E0B;
+  --color-danger: #EF4444;
+  
+  /* Neutral / Surface */
+  --color-surface-bg: #F8FAFC;
+  --color-surface-panel: #FFFFFF;
+  --color-border: #E2E8F0;
+  
+  /* Text */
+  --color-text-main: #1E293B;
+  --color-text-muted: #64748B;
+  --color-text-inverse: #FFFFFF;
+}
 
+@theme {
+  --color-primary: var(--color-primary);
+  --color-primary-hover: var(--color-primary-hover);
+  --color-secondary: var(--color-secondary);
+  --color-success: var(--color-success);
+  --color-warning: var(--color-warning);
+  --color-danger: var(--color-danger);
+  --color-surface-bg: var(--color-surface-bg);
+  --color-surface-panel: var(--color-surface-panel);
+  --color-border: var(--color-border);
+  --color-text-main: var(--color-text-main);
+  --color-text-muted: var(--color-text-muted);
+  --color-text-inverse: var(--color-text-inverse);
+  
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+}
 
 ::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 
 body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+    font-family: var(--font-sans);
+    background-color: var(--color-surface-bg);
+    color: var(--color-text-main);
     -webkit-font-smoothing: antialiased;
 }
 

@@ -81,6 +81,7 @@ function createWindow() {
     title: 'QCSiteDownloader',
     width: 1420,
     height: 680,
+    backgroundColor: '#F8FAFC',
     webPreferences: {
       preload: path.join(__dirname, 'preload.mjs'),
       nodeIntegration: false,
@@ -92,7 +93,14 @@ function createWindow() {
   /* -------- BrowserView A -------- */
   const viewA = new WebContentsView()
   win.contentView.addChildView(viewA)
-  viewA.webContents.loadURL(TARGET_URL)
+
+  // Load Guide Page
+  const GUIDE_PATH = VITE_DEV_SERVER_URL
+    ? path.join(process.env.APP_ROOT, 'public/guide.html')
+    : path.join(process.env.APP_ROOT, 'dist/guide.html');
+
+  viewA.webContents.loadFile(GUIDE_PATH)
+
   viewA.setBounds({ x: 0, y: 0, width: 1000, height: 800 })
 
   // 1️⃣ 拦截 window.open / target=_blank
@@ -284,6 +292,15 @@ ipcMain.handle('update-subview-url', (_, url) => {
   if (subView && url) {
     currentDownloadUrl = url;
     subView.webContents.loadURL(url)
+  }
+})
+
+ipcMain.handle('reset-view', () => {
+  if (subView) {
+    const GUIDE_PATH = VITE_DEV_SERVER_URL
+      ? path.join(process.env.APP_ROOT, 'public/guide.html')
+      : path.join(process.env.APP_ROOT, 'dist/guide.html');
+    subView.webContents.loadFile(GUIDE_PATH)
   }
 })
 

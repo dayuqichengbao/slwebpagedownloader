@@ -118,3 +118,6 @@ typings/
 
 # Electron-Forge
 out/
+
+.agent
+.shared
